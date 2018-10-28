@@ -1,5 +1,6 @@
 library(rworldmap)
 
+table(bee_mean[unique(bee_mean$Species),]$Region)
 ddf = read.table(text="
 country Richness
                  Australia 93
