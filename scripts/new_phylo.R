@@ -127,14 +127,19 @@ bee_phy3<- brm(log(Spec.wgt) ~ log(IT) + (1 | Region/Species), data = bee_all,
              control = list(adapt_delta = 0.99,max_treedepth=15))
 
 bee_phy_list=list(bee_phy1,bee_phy2,bee_phy3)
+<<<<<<< HEAD
 bee_tax_list=list(bee,bee1,bee2,bee3,bee4,bee5,bee6,bee7,bee8,bee9)
 bee_new_list=list(bee,bee1,bee2,bee3,bee4,bee5,bee6,bee7,bee8,bee9,bee_phy1,bee_phy2,bee_phy3)
+=======
+
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 #str(bee_all_list)
 #bee_phy_loo=lapply(bee_all_list,function (x) add_ic(x,c("loo")))
 
 #bee_phy_R2=lapply(bee_phy_list,function (x) bayes_R2(x))
 #bee_phy_ic=lapply(bee_phy_list,function (x) add_ic(x,c("waic","loo")))
 bee_phy_ic=lapply(bee_phy_list,function (x) add_ic(x,c("loo")))
+<<<<<<< HEAD
 bee_phy_ic_reloo=lapply(bee_phy_list,function (x) add_ic(x,c("loo"),reloo=TRUE))
 
 
@@ -147,3 +152,16 @@ lapply(bee_phy_list,function (x) bayes_R2(x))
 
 bee_phy_kfold=lapply(bee_phy_list,function (x) kfold(x,cores=4))
 bee_phy_kfold
+=======
+sapply(bee_phy_ic, "[[","loo")
+lapply(bee_phy_ic,function (x) loo(x))
+
+bee_tax_list=list(bee,bee1,bee2,bee3,bee4,bee5,bee6,bee7,bee8,bee9)
+bee_tax_ic=lapply(bee_tax_list,function (x) add_ic(x,c("loo")))
+bee_tax_ic=lapply(bee_tax_list,function (x) add_ic(x,c("loo"),reloo=TRUE))
+
+lapply(bee_tax_ic,function (x) loo(x))
+
+
+bee_phy_kfold=lapply(bee_phy_list,function (x) kfold(x,cores=4))
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595

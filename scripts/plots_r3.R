@@ -18,6 +18,10 @@ library(gtable)
 library(grid)
 library(gridExtra) 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 ##REGION - refit without species term 
 
 BR=bee_all %>%
@@ -93,12 +97,20 @@ HSS=hov_all%>%
   scale_colour_brewer("Subfamily", palette="Paired")+ 
   scale_shape_discrete(solid=FALSE)+
   theme_bw()  
+<<<<<<< HEAD
 
+=======
+HSS
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 #Sex
 
 HSX=hov_all %>%
   data_grid(hov_all,IT = seq_range(log(IT), n = 100)) %>%
+<<<<<<< HEAD
   add_fitted_draws(model=hov3,re_formula=NA,n=100) %>%
+=======
+  add_fitted_draws(model=hov2,re_formula=NA,n=100) %>%
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
   ggplot(aes(x = log(IT),y=log(Spec.wgt),color=Sex,shape=Sex)) + 
   xlab("ln ITD (mm)")+
   ylab("ln dry weight (mg)")+

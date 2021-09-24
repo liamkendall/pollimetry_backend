@@ -86,6 +86,7 @@ bee_phylo$IT.SD=as.numeric(unlist(aggregate(log(IT)~Family+Subfamily+
 
 rownames(bee_phylo)=droplevels(bee_phylo$Species)
 
+<<<<<<< HEAD
 
 ##LOAD TREE
 bee.trees=read.tree(file="data/hedtke_genera_tree.txt")
@@ -128,6 +129,32 @@ is.ultrametric(bee.tree)
 range(bee.tree$edge.length)
 bee.tree$node.label=NULL
 
+=======
+#Tree for MCMC
+
+bee.trees=read.tree(file="data/hedtke_genera_tree.txt")
+##Use tree 1 (376 genera) #Genera-level phylogney
+bee.mcmc=bee.trees[[1]]
+
+bee.mcmc=as.phylo(bee.mcmc)
+
+bee.mcmc=root(bee.mcmc,outgroup="Tachysphex")
+
+species=unique(as.character(bee_all$Species))
+
+bee.tree=drop.tip(bee.mcmc, setdiff(bee.mcmc$tip.label,unique(bee_all$Genus)))
+
+bee.tree=genus.to.species.tree(bee.tree, species=species)
+
+bee.tree=chronoMPL(bee.tree)
+bee.tree$edge.length[bee.tree$edge.length <0]=0.000001
+
+bee.tree=force.ultrametric(bee.tree,"extend")
+bee.tree$node.label=NULL
+
+
+
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 ##Intraspecific variance data frames
 bee_species=split(bee_all,bee_all$Species)
 hov_species=split(hov_all,hov_all$Species)
@@ -384,18 +411,30 @@ region_species=unique(bee_all[order(match(bee_all$Species, bee.tree$tip.label)),
 rownames(B)=unique(region_species)
 isSymmetric(B,check.attributes=FALSE)
 
+<<<<<<< HEAD
 bee_phy1<- brm(log(Spec.wgt) ~ Sex + log(IT) + (1 | Region/Species) + Sex:log(IT), data = bee_all, cores=4,
+=======
+bee_p1<- brm(log(Spec.wgt) ~ Sex + log(IT) + (1 | Region/Species) + Sex:log(IT), data = bee_all, cores=4,
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
            family = gaussian(),cov_ranef = list("Region:Species" = B),
            prior=bprior1,control = list(adapt_delta = 0.99,max_treedepth=15))
 
 #good
 
+<<<<<<< HEAD
 bee_phy2<- brm(log(Spec.wgt) ~ Sex + log(IT) + (1 | Region/Species), data = bee_all,prior=bprior1, cores=4,
+=======
+bee_p2<- brm(log(Spec.wgt) ~ Sex + log(IT) + (1 | Region/Species), data = bee_all,prior=bprior1, cores=4,
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
            family = gaussian(),cov_ranef = list("Region:Species" = B),
            control = list(adapt_delta = 0.99,max_treedepth=15))
 #good
 
+<<<<<<< HEAD
 bee_phy3<- brm(log(Spec.wgt) ~ log(IT) + (1 | Region/Species), data = bee_all,prior=bprior1, cores=4,
+=======
+bee_p3<- brm(log(Spec.wgt) ~ log(IT) + (1 | Region/Species), data = bee_all,prior=bprior1, cores=4,
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
            family = gaussian(),cov_ranef = list("Region:Species" = B),
            control = list(adapt_delta = 0.99,max_treedepth=15))
 
@@ -467,6 +506,7 @@ mcmc_nuts_energy(np_bee9,binwidth=10)
 
 ```{r}
 
+<<<<<<< HEAD
 bee_phy1
 check_all_diagnostics(bee_phy1$fit)
 plot(bee_phy1)
@@ -484,20 +524,51 @@ check_all_diagnostics(bee_phy3$fit)
 plot(bee_phy3)
 np_bee_p3<- nuts_params(bee_phy3)
 mcmc_nuts_energy(np_bee_phy3,binwidth=10)
+=======
+bee_p1
+check_all_diagnostics(bee_p1$fit)
+plot(bee_p1)
+np_bee_p1<- nuts_params(bee_p1)
+mcmc_nuts_energy(np_bee_p1,binwidth=10)
+
+bee_p2
+check_all_diagnostics(bee_p2$fit)
+plot(bee_p2)
+np_bee_p2<- nuts_params(bee_p2)
+mcmc_nuts_energy(np_bee_p2,binwidth=10)
+
+bee_p3
+check_all_diagnostics(bee_p3$fit)
+plot(bee_p3)
+np_bee_p3<- nuts_params(bee_p3)
+mcmc_nuts_energy(np_bee_p3,binwidth=10)
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 ```
 
 ```{r bee WAIC loo-ic}
 options(loo.cores = 4)
 bee_list=list(bee,bee1,bee2,bee3,bee4,bee5,bee6,bee7,bee8,bee9,bee_p1,bee_p2,bee_p3)
+<<<<<<< HEAD
 bee_R2=lapply(bee_list,function (x) bayes_R2(x))
   bee_R2 <- do.call("rbind", bee_R2)
   
+=======
+
+bee_list=lapply(bee_list,function (x) add_ic(x,ic=c ("waic","R2")))
+sapply(bee_list,"[[","kfold")
+sapply(bee_list,"[[","loo")
+bee_R2=lapply(bee_list,function (x) bayes_R2(x))
+
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 bee_kfold=lapply(bee_list,function (x) kfold(x,cores=4))
 
 lapply(bee_list,function (x) formula(x))
 sapply(bee_kfold,"[[","kfold")
+<<<<<<< HEAD
 sapply(bee_kfold,"[[","R2")
 
+=======
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 
 str(bee_kfold)
 bee_kfold[[3]]
@@ -505,10 +576,42 @@ bee_phy_kfold[[1]]
 bee_list[[10]]
 bayes_R2(bee_list[[10]])
 kfold(bee_list[[10]],K=10)
+<<<<<<< HEAD
 ```
 #Hoverfly model selection
 Test w. biogeography
 ```{r hoverfly models}
+=======
+2834.6-2803.7
+#names(bee_kfold)=c("bee1","bee2","bee3","bee4","bee5","bee6","bee7","bee_p1","bee_p2","bee_p3")
+#bee_kfold[[1]]$model_name="bee1"
+#bee_kfold[[2]]$model_name="bee2"
+#bee_kfold[[3]]$model_name="bee3"
+#bee_kfold[[4]]$model_name="bee4"
+#bee_kfold[[5]]$model_name="bee5"
+#bee_kfold[[6]]$model_name="bee6"
+#bee_kfold[[7]]$model_name="bee7"
+##bee_kfold[[8]]$model_name="bee_p1"
+#bee_kfold[[9]]$model_name="bee_p2"
+#bee_kfold[[10]]$model_name="bee_p3"
+#bee_kfold[[11]]$model_name="bee"
+#compare_ic(x=bee_kfold)
+#
+#plot(bee4)
+#bee_list[[10]]$waic
+
+
+#bee_loo=lapply(bee_list,function (x) loo(x,cores=4))
+#sapply(bee_list, "[[", "waic")
+#sapply(bee_list, "[[", "k_fold")
+#sapply(bee_list, "[[", "model_name")
+#bee_list[[1]]$
+#bee_list
+```
+#Hoverfly model selection
+Test w. biogeography
+```{r}
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 ###HOVERFLY MODELS
 
 
@@ -678,10 +781,17 @@ hov_kfold=lapply(hov_list,function(x) kfold(x,cores=4))
 #CAUTION#
 #CURRENTLY TAKES 48 hours
 
+<<<<<<< HEAD
 bee_list(bee,bee1,bee2,bee3,bee4,bee5,bee6,bee7,bee8,bee9,bee_phy1,bee_phy2,bee_phy3)
 bee_list=lapply(bee_list,function (x) add_ic(x,ic=c("waic","R2")))
 bee_R2=lapply(bee_list,function (x) bayes_R2(x))
 bee_RMSE=lapply(bee_list,function (x) rmse(exp(predict(x)[,1]),bee_all$Spec.wgt))
+=======
+bee_list(bee1,bee2,bee3,bee4,bee5,bee6,bee7,bee_p1,bee_p2,bee_p3)
+bee_list=lapply(bee_list,function (x) add_ic(x,ic=c("waic","R2")))
+bee_R2=lapply(bee_list,function (x) bayes_R2(x))
+bee_RMSE=lapply(bee_list,function (x) rmse(exp(predict(x)[,1]),hov_all$Spec.wgt))
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 
 
 ```
@@ -735,7 +845,10 @@ cladelabels(bee.tree,node=findMRCA(bee.tree,colletid_tips),text="Colletidae",
 #Bees
 ##Model validation - k-fold cross validation
 #Collate Bayesian R2, K-FOLD-IC and RMSE
+<<<<<<< HEAD
 
+=======
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 ```{r}
 bee_ics=rbind(cbind(median(bee_mcmc_list[[1]]$R2),
 median(bee_mcmc_list[[2]]$R2),
@@ -1410,6 +1523,7 @@ grid.draw(cbind(hovplot1, hovplot2,hovplot3, size = "first"))
 ##Relationship between BL AND IT
 bee_bl=bee_all[!is.na(bee_all$BL),]
 bee_blength=aggregate(bee_bl$BL~bee_bl$Species,FUN="mean")
+<<<<<<< HEAD
 bee_blength$IT=as.numeric(unlist(aggregate(bee_bl$IT~bee_bl$Species,FUN="mean")[2]))
 bee_blength$Spec.wgt=as.numeric(unlist(aggregate(bee_bl$Spec.wgt~bee_bl$Species,
                                                  FUN="mean")[2]))
@@ -1429,6 +1543,24 @@ cor.test(~log(IT)+log(BL),data=bee_blength)
 str(bee_blength)
 summary(lm( log(Spec.wgt)~ log(BL),bee_blength))
 summary(lm( log(Spec.wgt)~ log(IT),bee_blength))
+=======
+bee_blength$IT=aggregate(bee_bl$IT~bee_bl$Species,FUN="mean")[2]
+
+bee_bl=aggregate(bee_all$BL~bee_all$Species,FUN="mean")
+
+hov_bl=hov_all[!is.na(hov_all$BL),]
+hov_blength=aggregate(hov_bl$BL~hov_bl$Species,FUN="mean")
+hov_blength$IT=aggregate(hov_bl$IT~hov_bl$Species,FUN="mean")[2]
+
+hov_bl=aggregate(hov_all$BL~hov_all$Species,FUN="mean")
+
+###BEES
+cor.test(~log(IT)+log(BL),data=bee_bl)
+
+summary(lm( log(Spec.wgt)~ log(BL),bee_bl))
+summary(lm( log(Spec.wgt)~ log(IT),bee_bl))
+
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 
 
 ###HOV
@@ -1623,6 +1755,10 @@ rmse( (bee_bl$Spec.wgt), (lengthsize(bee_bl$BL,"HYM")[,11])),
 rmse( (bee_bl$Spec.wgt), (lengthsize(bee_bl$BL,"HYM")[,12])))
 
 mean(bee_bl_rmse)
+<<<<<<< HEAD
+=======
+36.36586 +- 8.295096
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 sd(bee_bl_rmse)/sqrt(12)
 
 rmse((bee_all$Spec.wgt),(Cane(IT=bee_all$IT)))
@@ -1631,7 +1767,11 @@ rmse((bee_all$Spec.wgt),(Cane(IT=bee_all$IT)))
 #Save data files - rda files
 ```{r}
 bee_tax_mod=bee3
+<<<<<<< HEAD
 bee_phy_mod=bee_phy1
+=======
+bee_phy_mod=bee_p1
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 bee_IT=bee1
 hov_tax_mod=hov3
 hov_IT=hov7
@@ -1648,11 +1788,15 @@ save(hov_tax_mod,file="hov_tax_mod.rdata",compress="xz")
 save(hov_sex,file="hov_sex_mod.rdata",compress="xz")
 save(hov_IT,file="hov_IT.rdata",compress="xz")
 
+<<<<<<< HEAD
 pollimetry_dataset=poll_all%>%
   select(Superfamily,Family,Subfamily,Tribe,Genus,Subgenus,Species,
          Sex,Spec.wgt,IT,BL,
          Tag,Region,Country,Measurement,Locality,
          Location,Latitude,Longitude,Pres.time,Col.date,Plant,
          Col.method)
+=======
+pollimetry_dataset=poll_all
+>>>>>>> ce36b7860017ecf456e9442bea97fa57d0e72595
 save(pollimetry_dataset,file="data/pollimetry_dataset.rdata",compress="xz")
 ```
