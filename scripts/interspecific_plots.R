@@ -32,7 +32,7 @@ lay <- rbind(c(1,2,3),
              c(4,5,6))
 plot_grid(bee1,bee2,bee3,hov1,hov2,hov3,ncol=3,nrow=2,layout_matrix = lay)
 
-3.73 x 12.9
+
 
 ##INTRASPECIFIC PLOTS
 
@@ -65,11 +65,10 @@ bee.plot$tip.label=="Heriades"
 
 bee_wgt_phy=contMap(bee.tree,WGT,plot=FALSE)
 bee_wgt_phy=setMap(bee_wgt_phy,invert=TRUE)
-plot(bee_wgt_phy,type="fan"
-,ftype="off",
+plot(bee_wgt_phy,ftype="off",
 fsize=c(0.4,1),lwd=0.95,
 xlim=c(0,1.25*max(nodeHeights(bee.tree))),
-     ftype="i",leg.txt="ln body size")
+     ftype="i",leg.txt="ln Dry weight")
 
 mel_tips<-c("Macropis_europaea","Hesperapis_carinata")
 megachil_tips<-c("Lithurgus_spp","Anthidium_sticticum")
@@ -91,17 +90,3 @@ cladelabels(bee.tree,node=findMRCA(bee.tree,colletid_tips),text="Colletidae",
             orientation="horizontal",offset=2)
 
 
-str(hov_all)
-##DENSITY PLOTS
-ggplot(bee_mean,aes(x=log(Spec.wgt),col=Region))+geom_density(cex=0.75)+theme_bw()+facet_grid(Family ~.)
-ggplot(bee_mean,aes(x=log(Spec.wgt),col=Sex))+geom_density(cex=0.75)+theme_bw()+facet_grid(Family ~.)
-
-ggplot(hov_mean,aes(x=log(Spec.wgt),col=Region))+geom_density(cex=0.75)+theme_bw()+facet_grid(Subfamily~.)
-ggplot(hov_mean,aes(x=log(Spec.wgt),col=Sex))+geom_density(cex=0.75)+theme_bw()+facet_grid(Subfamily~.)
-
-ggplot(bee_mean,aes(x=log(Spec.wgt),col=Country))+geom_density(cex=0.75)+theme_bw()
-
-ggplot(hov_all,aes(x=log(Spec.wgt),col=Country))+geom_density(cex=0.75)+theme_bw()
-
-bee_RMSE
-Hov_RMSE

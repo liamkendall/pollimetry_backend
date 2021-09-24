@@ -1,7 +1,11 @@
 .Rproj.user
 .Rhistory
 .RData
-.Ruserdata
+.RDataTmp
+.RDataTmp1
+19818.RData
+new2610.RData
+Ruserdata
 *.pdf
 *.xls
 *.doc

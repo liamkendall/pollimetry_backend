@@ -16,8 +16,10 @@ summary(lm(log(bee_bl$IT)~log(bee_bl$BL),data=bee_bl))
 
 summary(lm(log(hov_bl$IT)~log(hov_bl$BL),data=hov_bl))
 
+str(bee_bl)
+cor.test(x=(hov_bl$IT),y=(hov_bl$BL),data=hov_bl)
+cor.test(x=(bee_bl$IT),y=(bee_bl$BL),data=bee_bl)
 
-cor.test(x=log(hov_bl$IT),y=log(hov_bl$BL),data=hov_bl)
 
 summary(bee_blit)
 
